@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="auth">
+
+    <p class="eyebrow">ALMOST YOURS</p>
+
+    <h1>Checkout</h1>
+
+    <p class="muted">
+        Complete your details to place your order.
+    </p>
+
+    <form method="post">
+
+        <!-- Customer phone number -->
+        <label>
+            Phone Number
+
+            <input
+                type="tel"
+                name="phone"
+                placeholder="Enter your 10-digit phone number"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                required
+            >
+        </label>
+
+        <!-- Delivery method -->
+        <label>
+            Delivery Method
+
+            <select
+                name="delivery_method"
+                id="delivery_method"
+                onchange="toggleAddress()"
+                required
+            >
+                <option value="">Select delivery method</option>
+                <option value="Home Delivery">Home Delivery</option>
+                <option value="Store Pickup">Store Pickup</option>
+            </select>
+        </label>
+
+        <!-- Address field -->
+        <div id="address_section">
+
+            <label>
+                Delivery Address
+
+                <textarea
+                    name="address"
+                    id="address"
+                    placeholder="House number, street, area, city, PIN code"
+                ></textarea>
+            </label>
+
+        </div>
+
+        <!-- Store pickup information -->
+        <div id="pickup_info" class="pay" style="display:none;">
+
+            <b>Store Pickup</b>
+
+            <p class="muted">
+                You can collect your order directly from the vendor's store.
+                No delivery address is required.
+            </p>
+
+        </div>
+
+        <!-- Payment method -->
+        <div class="pay">
+
+            Payment method<br>
+
+            <b>Cash on Delivery / Pay at Store</b>
+
+        </div>
+
+        <button class="btn full" type="submit">
+            Place Order
+        </button>
+
+    </form>
+
+</section>
+
+<script>
+
+    // Show or hide address depending on delivery method
+    function toggleAddress() {
+
+        const method = document.getElementById("delivery_method").value;
+
+        const addressSection = document.getElementById("address_section");
+
+        const addressInput = document.getElementById("address");
+
+        const pickupInfo = document.getElementById("pickup_info");
+
+        if (method === "Store Pickup") {
+
+            addressSection.style.display = "none";
+
+            addressInput.required = false;
+
+            pickupInfo.style.display = "block";
+
+        } else {
+
+            addressSection.style.display = "block";
+
+            addressInput.required = true;
+
+            pickupInfo.style.display = "none";
+
+        }
+
+    }
+
+</script>
+
+{% endblock %}

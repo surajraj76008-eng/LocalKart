@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <p class="eyebrow">SELLER STUDIO</p>
+
+    <h1>Your shop, {{user.name}}</h1>
+
+    <p class="muted">
+        Add products and keep track of customer orders.
+    </p>
+
+    <div class="two">
+
+        <!-- Add product section -->
+        <section class="panel">
+
+            <h2>Add a product</h2>
+
+            <form method="post" action="/vendor/add">
+
+                <label>
+                    Product name
+                    <input name="name" required>
+                </label>
+
+                <label>
+                    Category
+                    <input name="category" required>
+                </label>
+
+                <label>
+                    Description
+                    <textarea name="description"></textarea>
+                </label>
+
+                <label>
+                    Price (₹)
+                    <input type="number" name="price" min="1" step=".01" required>
+                </label>
+
+                <label>
+                    Image URL
+                    <input name="image" placeholder="https://...">
+                </label>
+
+                <label>
+                    Stock
+                    <input type="number" name="stock" min="0" value="10">
+                </label>
+
+                <button class="btn">Publish product</button>
+
+            </form>
+
+        </section>
+
+        <!-- Your products section -->
+        <section>
+
+            <h2>Your products</h2>
+
+            {% for p in products %}
+
+            <div class="order">
+
+                <b>{{p.name}}</b>
+
+                <span>₹{{p.price}}</span>
+
+                <span>Stock: {{p.stock}}</span>
+
+            </div>
+
+            {% else %}
+
+            <p class="empty">You haven't listed products yet.</p>
+
+            {% endfor %}
+
+        </section>
+
+    </div>
+
+    <!-- Incoming orders section -->
+    <h2>Incoming Orders</h2>
+
+    {% for o in orders %}
+
+    <div class="order">
+
+        <h3>{{o.product}}</h3>
+
+        <p><b>Customer:</b> {{o.customer_name}}</p>
+
+        <p>
+            <b>Phone:</b>
+            <a href="tel:{{o.customer_phone}}">
+                {{o.customer_phone}}
+            </a>
+        </p>
+
+        <p><b>Quantity:</b> {{o.quantity}}</p>
+
+        <p><b>Total Amount:</b> ₹{{o.total}}</p>
+
+        <p>
+            <b>Delivery Method:</b>
+            {{o.delivery_method}}
+        </p>
+
+        {% if o.delivery_method == "Home Delivery" %}
+
+            <p>
+                <b>Customer Address:</b>
+                {{o.address}}
+            </p>
+
+        {% else %}
+
+            <p>
+                <b>Pickup Information:</b>
+                Customer will collect the order from your store.
+            </p>
+
+        {% endif %}
+
+        <p>
+            <b>Current Status:</b>
+            {{o.status}}
+        </p>
+
+        <!-- Update order status -->
+        <form method="POST"
+              action="{{url_for('update_order_status', order_id=o.id)}}">
+
+            <label>Update Order Status</label>
+
+            <select name="status" required>
+
+                <option value="Accepted">Accepted</option>
+
+                <option value="Packed">Packed</option>
+
+                <option value="Out for Delivery">Out for Delivery</option>
+
+                <option value="Delivered">Delivered</option>
+
+                <option value="Ready for Pickup">Ready for Pickup</option>
+
+                <option value="Picked Up">Picked Up</option>
+
+            </select>
+
+            <button class="btn" type="submit">
+                Update Status
+            </button>
+
+        </form>
+
+    </div>
+
+    {% else %}
+
+    <p class="empty">No orders yet.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

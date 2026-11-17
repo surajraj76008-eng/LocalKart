@@ -1,0 +1,5 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}LocalKart{% endblock %}</title><link rel="stylesheet" href="{{url_for('static',filename='style.css')}}"></head>
+<body><header class="top"><a class="logo" href="/">local<span>kart</span></a><form class="search" action="/" method="get"><input name="q" value="{{request.args.get('q','')}}" placeholder="Search products, shops and more"><button>Search</button></form><nav><a href="/">Home</a><a href="/cart">Cart</a>{% if user %}<a href="/dashboard">{{user.name}}</a><a href="/logout">Logout</a>{% else %}<a href="/login">Sign in</a><a class="join" href="/register">Join</a>{% endif %}</nav></header>
+{% with messages=get_flashed_messages() %}{% if messages %}<div class="messages">{% for m in messages %}<p>{{m}}</p>{% endfor %}</div>{% endif %}{% endwith %}
+<main>{% block content %}{% endblock %}</main><footer>© 2026 LocalKart · Discover and support local shops near you.</footer></body></html>
